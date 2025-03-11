@@ -25,9 +25,9 @@ void EngineCreateSyncobjects() {
 
     TDevice *device = (TDevice *)engine.device;
 
-    engine.Sync.imageAvailableSemaphores = (VkSemaphore *)AllocateMemoryP(engine.MAX_FRAMES_IN_FLIGHT, sizeof(VkSemaphore), &engine);
-    engine.Sync.renderFinishedSemaphores = (VkSemaphore *)AllocateMemoryP(engine.MAX_FRAMES_IN_FLIGHT, sizeof(VkSemaphore), &engine);
-    engine.Sync.inFlightFences = (VkFence *)AllocateMemoryP(engine.MAX_FRAMES_IN_FLIGHT, sizeof(VkFence), &engine);
+    engine.Sync.imageAvailableSemaphores = (VkSemaphore *)AllocateMemoryP(engine.imagesCount, sizeof(VkSemaphore), &engine);
+    engine.Sync.renderFinishedSemaphores = (VkSemaphore *)AllocateMemoryP(engine.imagesCount, sizeof(VkSemaphore), &engine);
+    engine.Sync.inFlightFences = (VkFence *)AllocateMemoryP(engine.imagesCount, sizeof(VkFence), &engine);
 
     VkSemaphoreCreateInfo semaphoreInfo = {};
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -36,7 +36,7 @@ void EngineCreateSyncobjects() {
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
-    for (int i = 0; i < engine.MAX_FRAMES_IN_FLIGHT; i++) {
+    for (int i = 0; i < engine.imagesCount; i++) {
         if (vkCreateSemaphore((VkDevice)device->e_device, &semaphoreInfo, NULL, &engine.Sync.imageAvailableSemaphores[i]) != VK_SUCCESS ||
             vkCreateSemaphore((VkDevice)device->e_device, &semaphoreInfo, NULL, &engine.Sync.renderFinishedSemaphores[i]) != VK_SUCCESS ||
             vkCreateFence((VkDevice)device->e_device, &fenceInfo, NULL, &engine.Sync.inFlightFences[i]) != VK_SUCCESS) {
@@ -137,9 +137,12 @@ void TEngineHandleAppCommand(android_app * app, int32_t cmd){
         case APP_CMD_INIT_WINDOW:
             printf("APP_CMD_INIT_WINDOW");
             androidApp = app;
-            TEngineInitSystem();
             EngineClassicInit();
             androidApp->userData = &engine;
+
+            if(engine.func.InitFunc != NULL)
+                engine.func.InitFunc();
+
             break;
         case APP_CMD_LOST_FOCUS:
             printf("APP_CMD_LOST_FOCUS");
@@ -343,4 +346,19 @@ void TEngineRender(){
 
     /*if(GUIManagerIsInit())
         GUIManagerClear();*/
+}
+
+void TEngineDraw(GameObject *go){
+
+    for( int i=0;i < engine.gameObjects.size;i++){
+        if(engine.gameObjects.objects[i] == go)
+            return;
+    }
+
+    engine.gameObjects.objects[engine.gameObjects.size] = go;
+    engine.gameObjects.size ++;
+}
+
+void TEngineSetInitFunc(InitFunc_T func){
+    engine.func.InitFunc = func;
 }

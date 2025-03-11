@@ -104,6 +104,7 @@ typedef struct{
     EngineGameObjects gameObjects;
 
     struct{
+        void (*InitFunc)(void);
         void (*UpdateFunc)(float);
         void (*DrawFunc)(void);
         void (*RecreateFunc)(void);

@@ -135,7 +135,7 @@ void GraphicsObjectSetVertex(GraphicsObject* graphObj, void *vert, int vertCount
 }
 
 void GraphicsObjectSetShaderWithUniform(GraphicsObject* graphObj, ShaderObject *shader, uint32_t pack_indx){
-    /*ShaderBuilder *temp = (ShaderBuilder *)AllocateMemory(1, sizeof(ShaderBuilder));
+    ShaderBuilder *temp = (ShaderBuilder *)AllocateMemory(1, sizeof(ShaderBuilder));
 
     ShaderBuilderMakeUniformsFromShader(temp, (uint32_t *)shader->code, shader->size, &graphObj->blueprints, pack_indx);
 
@@ -163,7 +163,7 @@ void GraphicsObjectSetShaderWithUniform(GraphicsObject* graphObj, ShaderObject *
 
     PipelineSettingSetShader(setting, shader, type);
 
-    FreeMemory(temp);*/
+    FreeMemory(temp);
 }
 
 void GraphicsObjectSetShader(GraphicsObject* graphObj, ShaderObject *shader, uint32_t pack_indx, uint32_t shader_type){

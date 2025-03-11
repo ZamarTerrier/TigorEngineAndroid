@@ -3,8 +3,17 @@
 #include "AndroidOut.h"
 #include "TigorEngine.h"
 
+#include "e_camera.h"
+
+#include "primitive_object.h"
+
 #include <game-activity/GameActivity.cpp>
 #include <game-text-input/gametextinput.cpp>
+
+PrimitiveObject obj;
+
+Camera2D cam2D;
+Camera3D cam3D;
 
 extern "C" {
 
@@ -25,11 +34,27 @@ bool motion_event_filter_func(const GameActivityMotionEvent *motionEvent) {
             sourceClass == AINPUT_SOURCE_CLASS_JOYSTICK);
 }
 
+void Init(){
+    Camera2DInit(&cam2D);
+    Camera3DInit(&cam3D);
+
+    DrawParam dParam;
+    memset(&dParam, 0, sizeof(DrawParam));
+
+    PrimitiveObjectInit(&obj,&dParam, TIGOR_PRIMITIVE3D_CUBE, NULL);
+
+    Transform3DSetPosition((GameObject3D_T *)&obj, 0, 0, -5);
+}
+
 /*!
  * This the main entry point for a native activity
  */
+ float rot = 0;
 void android_main(struct android_app *pApp) {
     aout << "Welcome to android_main" << std::endl;
+
+    TEngineInitSystem();
+    TEngineSetInitFunc(Init);
 
     // Can be removed, useful to ensure your code is running
     //aout << "Welcome to android_main" << std::endl;
@@ -80,6 +105,12 @@ void android_main(struct android_app *pApp) {
 
             // Process game input
             //pRenderer->handleInput();
+
+            rot += 0.4f;
+
+            Transform3DSetRotation((GameObject3D_T *)&obj, 0, rot, 0);
+
+            TEngineDraw((GameObject *)&obj);
 
             // Render a frame
             TEngineRender();

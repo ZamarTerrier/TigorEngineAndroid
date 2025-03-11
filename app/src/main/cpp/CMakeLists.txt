@@ -15,6 +15,7 @@ add_library(testandroid SHARED
         AndroidOut.cpp
         e_blue_print.cpp
         e_buffer.cpp
+        e_camera.cpp
         e_debugger.cpp
         e_descriptor.cpp
         e_device.cpp
@@ -22,13 +23,21 @@ add_library(testandroid SHARED
         e_math.cpp
         e_memory.cpp
         e_resource_descriptors.cpp
+        e_resource_shapes.cpp
+        e_shaders.cpp
         e_texture.cpp
         e_tools.cpp
+        e_transform.cpp
         e_window.cpp
         game_object.cpp
+        game_object_2D.cpp
+        game_object_3D.cpp
         graphics_object.cpp
+        light_object.cpp
         pipeline.cpp
+        primitive_object.cpp
         render_texture.cpp
+        shader_builder.cpp
         swapchain.cpp
         TigorEngine.cpp
         vulkan_android.cpp)

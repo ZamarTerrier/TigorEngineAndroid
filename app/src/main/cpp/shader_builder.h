@@ -5,7 +5,6 @@
 #ifndef TESTANDROID_SHADER_BUILDER_H
 #define TESTANDROID_SHADER_BUILDER_H
 
-
 #include <stdint.h>
 
 #define EXTEND_IMPORT_POINT_INDEX 0x1
@@ -223,5 +222,63 @@ typedef struct{
     uint32_t gl_struct_indx;
     struct ChildStack *alloc_head;
 } ShaderBuilder;
+
+void ShaderBuilderInit(ShaderBuilder *builder, ShaderType type);
+void ShaderBuilderMake();
+void ShaderBuilderWriteToFile(ShaderBuilder *builder, const char *path);
+
+void ShaderBuilderSetCurrentFunc(uint32_t func_indx);
+void ShaderBuilderSetCurrentLabel(uint32_t label_indx);
+
+uint32_t ShaderBuilderAddPointer(ShaderVariableType point_type, uint32_t size, ShaderDataFlags flags);
+uint32_t ShaderBuilderAddConstant(ShaderVariableType var_type, ShaderDataFlags flags,  uint32_t valu, uint32_t sign);
+uint32_t ShaderBuilderAddConstantComposite(ShaderVariableType var_type, uint32_t size, uint32_t value);
+
+uint32_t ShaderBuilderAddFloat();
+uint32_t ShaderBuilderAddVector(uint32_t size, char *name);
+uint32_t ShaderBuilderAddMatrix(uint32_t size, char *name);
+VectorExtract ShaderBuilderGetElemenets(uint32_t src_type, uint32_t src_index, uint32_t src_size, uint32_t start_indx, uint32_t size);
+uint32_t ShaderBuilderAddOperand(uint32_t *indexes, uint32_t count, ShaderOperandType operand);
+uint32_t ShaderBuilderAcceptAccess(uint32_t val_indx, ShaderVariableType var_type, uint32_t type_arg, uint32_t *chain, uint32_t size, uint32_t flags);
+uint32_t ShaderBuilderAcceptLoad(uint32_t val_indx, uint32_t struct_indx);
+
+uint32_t ShaderBuilderMakeExternalFunction(uint32_t *arg, uint32_t size, uint32_t ext_indx);
+uint32_t ShaderBuilderMakeFunctionCalling(ShaderVariableType type, uint32_t type_arg, uint32_t func_indx, uint32_t *args, uint32_t size);
+
+uint32_t ShaderBuilderMakeReturnValue(uint32_t ret_val);
+void ShaderBuilderMakeTransition(uint32_t indx_label);
+uint32_t ShaderBuilderNextLabel(int will_return, uint32_t num_label);
+
+uint32_t ShaderBuilderMutateVector(uint32_t val_indx, uint32_t val_size, uint32_t res_size);
+uint32_t ShaderBuilderMakeVectorConstruct(float *vals, uint32_t num_vals);
+uint32_t ShaderBuilderCompositeConstruct(uint32_t *arr_arg, uint32_t size_arr);
+
+uint32_t ShaderBuilderConvertFToS(uint32_t val_indx);
+
+void ShaderBuilderMakeKill();
+
+void ShaderBuilderMakeBranchConditional(ConditionalType cond_type, uint32_t *vals, uint32_t size, uint32_t sel_merge, uint32_t true_label, uint32_t false_label);
+
+uint32_t ShaderBuilderMakeNegative(uint32_t val_1, uint32_t indx_1, uint32_t arg, uint32_t res_type);
+uint32_t ShaderBuilderMakeDotProduct(uint32_t val_1, uint32_t indx_1, uint32_t val_2, uint32_t indx_2);
+
+ShaderFunc *ShaderBuilderAddFunction(ShaderVariableType output, uint32_t type_arg, char *name, uint32_t *args, uint32_t size);
+
+uint32_t ShaderBuilderAddFuncDiv(uint32_t val_1, uint32_t indx_1, uint32_t type_1, uint32_t size_1,  uint32_t val_2, uint32_t indx_2, uint32_t type_2, uint32_t size_2, uint32_t res_size);
+uint32_t ShaderBuilderAddFuncMult(uint32_t val_1, uint32_t indx_1, uint32_t type_1, uint32_t size_1,  uint32_t val_2, uint32_t indx_2, uint32_t type_2, uint32_t size_2, uint32_t res_size);
+uint32_t ShaderBuilderAddFuncAdd(uint32_t val_1, uint32_t indx_1, uint32_t type_1, uint32_t size_1,  uint32_t val_2, uint32_t indx_2, uint32_t type_2, uint32_t size_2, uint32_t res_size);
+uint32_t ShaderBuilderAddFuncSub(uint32_t val_1, uint32_t indx_1, uint32_t type_1, uint32_t size_1,  uint32_t val_2, uint32_t indx_2, uint32_t type_2, uint32_t size_2, uint32_t res_size);
+uint32_t ShaderBuilderAddFuncMove(uint32_t src_indx, uint32_t src_size, uint32_t dest_indx, uint32_t dest_size);
+uint32_t ShaderBuilderGetTexture(uint32_t texture_indx, uint32_t uv_indx, uint32_t elem_num);
+
+void ShaderBuilderStoreValue(uint32_t *arr, uint32_t size);
+
+uint32_t ShaderBuilderAddUniform(ShaderStructConstr *struct_arr, uint32_t count, char *name, uint32_t location, uint32_t binding);
+uint32_t ShaderBuilderAddIOData(ShaderVariableType type, ShaderDataFlags flags, ShaderStructConstr *struct_arr, uint32_t size, char *name, uint32_t location, uint32_t binding);
+
+void ShaderBuilderMakeUniformsFromShader(ShaderBuilder *builder, uint32_t *code, uint32_t size, void *blueprints, uint32_t indx_pack);
+void ShaderBuilderParcingShader(uint32_t *shader, uint32_t size);
+
+void ShaderBuilderClear(ShaderBuilder *builder);
 
 #endif //TESTANDROID_SHADER_BUILDER_H
