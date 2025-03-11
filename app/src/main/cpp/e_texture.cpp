@@ -23,6 +23,8 @@
 #include "e_math.h"
 #include "e_tools.h"
 
+#include "e_resource_shapes.h"
+
 extern TEngine engine;
 
 //Не корректно
@@ -175,7 +177,7 @@ void ImageCreateEmpty(Texture2D *texture, uint32_t usage) {
 
 void TextureCreateEmptyDefault(Texture2D *texture)
 {
-    /*TDevice *device = (TDevice *)engine.device;
+    TDevice *device = (TDevice *)engine.device;
 
     BufferObject stagingBuffer;
 
@@ -199,7 +201,7 @@ void TextureCreateEmptyDefault(Texture2D *texture)
     ToolsCopyBufferToImage((void *)stagingBuffer.buffer, (void *)texture->image, EMPTY_IMAGE_WIDTH, EMPTY_IMAGE_HEIGHT);
     ToolsTransitionImageLayout((void *)texture->image, texture->textureType, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 1);
 
-    BuffersDestroyBuffer(&stagingBuffer);*/
+    BuffersDestroyBuffer(&stagingBuffer);
 }
 
 void TextureCreateEmpty(Texture2D *texture)

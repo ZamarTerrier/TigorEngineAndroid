@@ -542,7 +542,7 @@ void GameObject3DInit(GameObject3D *go, GameObjectType type){
     GameObjectSetRecreateFunc((GameObject *)go, (void *)GameObject3DRecreate);
     GameObjectSetDestroyFunc((GameObject *)go, (void *)GameObject3DDestroy);
 
-    GameObjectSetShaderInitFunc((GameObject *)go, (void *)GameObject3DInitDefaultShader);
+    GameObjectSetShaderInitFunc((GameObject *)go, (void *) GameObject3DInitDefaultLightShader);
 
 
     go->self.obj_type = type;

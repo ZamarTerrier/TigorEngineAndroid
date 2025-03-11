@@ -71,14 +71,14 @@ void EngineClassicInit(){
 
     EngineInitVulkan();
 
-    /*char *text = "Null texture";
-    engine_buffered_image *images = engine.DataR.e_var_images;
+    char *text = "Null texture";
+    engine_buffered_image *images = (engine_buffered_image *)engine.DataR.e_var_images;
     TextureCreateEmptyDefault(&images[engine.DataR.e_var_num_images].texture);
     TextureCreateTextureImageView(&images[engine.DataR.e_var_num_images].texture, VK_IMAGE_VIEW_TYPE_2D);
     TextureCreateSampler(&images[engine.DataR.e_var_num_images].texture.sampler, images[engine.DataR.e_var_num_images].texture.textureType,  images[engine.DataR.e_var_num_images].texture.image_data.mip_levels);
 
     memcpy(images[engine.DataR.e_var_num_images].path, text, strlen(text));
-    engine.DataR.e_var_num_images ++;*/
+    engine.DataR.e_var_num_images ++;
 
     memset(&engine.renders, 0, sizeof(EngineRenderItems));
     memset(&engine.lights, 0, sizeof(EngineLightItems));
@@ -110,11 +110,11 @@ void TEngineInitSystem()
 
     engine.MAX_FRAMES_IN_FLIGHT = 3;
 
-    /*engine.DataR.e_var_images = AllocateMemoryP(MAX_IMAGES, sizeof(engine_buffered_image), &engine);
+    engine.DataR.e_var_images = AllocateMemoryP(MAX_IMAGES, sizeof(engine_buffered_image), &engine);
     engine.DataR.e_var_num_images = 0;
 
-    engine.DataR.e_var_fonts = AllocateMemoryP(MAX_FONTS, sizeof(FontCache), &engine);
-    engine.DataR.e_var_num_fonts = 0;*/
+    engine.DataR.e_var_fonts = (FontCache*)AllocateMemoryP(MAX_FONTS, sizeof(FontCache), &engine);
+    engine.DataR.e_var_num_fonts = 0;
 
 #ifdef __ANDROID__
     AndroidLoadVulkanLibrary();
